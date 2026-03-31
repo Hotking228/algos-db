@@ -1,7 +1,5 @@
 package com.hotking.algosdb.service;
 
-import com.hotking.algosdb.entity.Algorithm;
-import com.hotking.algosdb.entity.Complexity;
 import com.hotking.algosdb.entity.Tag;
 import com.hotking.algosdb.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +22,7 @@ public class TagService {
         return tagRepository.findByAlgoId(algoId);
     }
 
-    public Optional<Tag> getAlgoById(Integer id){
+    public Optional<Tag> getById(Integer id){
         //TODO: добавить исключение
         return Optional.of(tagRepository.findById(id))
                 .orElseThrow();
