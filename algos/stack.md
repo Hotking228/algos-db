@@ -81,3 +81,4 @@ public class StackArray<T> {
         array = newArray;
     }
 }
+```

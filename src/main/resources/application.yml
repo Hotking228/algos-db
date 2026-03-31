@@ -15,3 +15,5 @@ spring:
           batch_size: 100
   application:
     name: algos-db
+server:
+  port: 8081

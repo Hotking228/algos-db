@@ -19,6 +19,7 @@ public interface AlgoRepository extends JpaRepository<Algorithm, Integer> {
             "join fetch a.tags t " +
             "join fetch a.complexity c " +
             "where (t.name in (:tags) or :#{#tags.isEmpty()} = true) and " +
-            "(c.comp in (:complexities) or :#{#complexities.isEmpty()} = true)")
+            "(c.comp in (:complexities) or :#{#complexities.isEmpty()} = true) " +
+            "order by a.id")
     public List<Algorithm> findAlgorithmsByTagsAndComps(List<String> tags, List<String> complexities);
 }

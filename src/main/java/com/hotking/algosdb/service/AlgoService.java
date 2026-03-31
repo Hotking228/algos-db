@@ -5,8 +5,15 @@ import com.hotking.algosdb.entity.Complexity;
 import com.hotking.algosdb.entity.Tag;
 import com.hotking.algosdb.repository.AlgoRepository;
 import lombok.RequiredArgsConstructor;
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.stereotype.Service;
+import org.yaml.snakeyaml.reader.StreamReader;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,10 +36,24 @@ public class AlgoService {
                     .toList());
     }
 
-    public Optional<Algorithm> getAlgoById(Integer id){
+    public String getById(Integer id) {
         //TODO: добавить исключение
-        return Optional.of(algoRepository.findById(id))
-                .orElseThrow();
+        Algorithm algo = algoRepository.findById(id).orElseThrow();
+        BufferedReader reader = null;
+        try {
+             reader = new BufferedReader(new FileReader(algo.getFilePath()));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        StringBuilder sb = new StringBuilder();
+        reader.lines().forEach(line -> {sb.append(line); sb.append("\n");});
+
+        Parser parser = Parser.builder().build();
+        HtmlRenderer renderer = HtmlRenderer.builder().build();
+
+        Node document = parser.parse(sb.toString());
+
+        return renderer.render(document);
     }
 
     public Integer update(Integer id, Algorithm algorithm){

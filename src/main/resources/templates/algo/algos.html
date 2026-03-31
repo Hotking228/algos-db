@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+
+    <body>
+        <div th:each="algo : ${algos}">
+            <a th:href="'/algo/' + ${algo.id}" th:text="${algo.id} + '. ' + ${algo.name}">Algo url</a>
+        </div>
+    </body>
+</html>
