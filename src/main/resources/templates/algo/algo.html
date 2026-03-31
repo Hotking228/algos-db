@@ -11,6 +11,8 @@
     <!-- Сам скрипт Highlight.js (ОБЯЗАТЕЛЬНО!) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
     <script>
         // Активируем подсветку после загрузки страницы
         document.addEventListener('DOMContentLoaded', () => {
@@ -38,10 +40,14 @@
             font-family: "SF Mono", Monaco, Consolas, monospace;
             font-size: 14px;
         }
+
+        .math {
+            font-size: 1.1em;
+        }
     </style>
 </head>
-<body>
-<!-- Используем div вместо span, так как контент может содержать блоки -->
-<div th:utext="${content}">Content will appear here</div>
-</body>
+    <body>
+        <!-- Используем div вместо span, так как контент может содержать блоки -->
+        <div th:utext="${content}">Content will appear here</div>
+    </body>
 </html>
