@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Comparator;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,4 +25,11 @@ public class TagRepositoryTest {
         assertThat(tags.get(0).getName()).isEqualTo("сортировка");
     }
 
+    @Test
+    public void shouldFindTagsByAlgoId(){
+        List<Tag> tag = tagRepository.findByAlgoId(1).stream().sorted(Comparator.comparing(Tag::getName)).toList();
+        assertThat(tag).hasSize(2);
+        assertThat(tag.get(0).getName()).isEqualTo("рекурсия");
+        assertThat(tag.get(1).getName()).isEqualTo("сортировка");
+    }
 }
