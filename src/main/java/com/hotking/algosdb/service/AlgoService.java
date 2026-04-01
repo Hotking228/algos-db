@@ -1,21 +1,17 @@
 package com.hotking.algosdb.service;
 
 import com.hotking.algosdb.entity.Algorithm;
-import com.hotking.algosdb.entity.Complexity;
-import com.hotking.algosdb.entity.Tag;
 import com.hotking.algosdb.repository.AlgoRepository;
 import lombok.RequiredArgsConstructor;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.stereotype.Service;
-import org.yaml.snakeyaml.reader.StreamReader;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,13 +23,8 @@ public class AlgoService {
         return algoRepository.saveAndFlush(algorithm).getId();
     }
 
-    public List<Algorithm> getAlgosByTagsAndComps(List<Tag> tags, List<Complexity> complexities){
-        return algoRepository.findAlgorithmsByTagsAndComps(tags.stream()
-                    .map(Tag::getName)
-                    .toList(),
-                complexities.stream()
-                    .map(Complexity::getComp)
-                    .toList());
+    public List<Algorithm> getAlgosByTagsAndComps(List<String> tags, List<String> complexities){
+        return algoRepository.findAlgorithmsByComps(complexities);
     }
 
     public String getById(Integer id) {
@@ -45,6 +36,7 @@ public class AlgoService {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+
         StringBuilder sb = new StringBuilder();
         reader.lines().forEach(line -> {sb.append(line); sb.append("\n");});
 

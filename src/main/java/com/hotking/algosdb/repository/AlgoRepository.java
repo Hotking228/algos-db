@@ -1,10 +1,6 @@
 package com.hotking.algosdb.repository;
 
 import com.hotking.algosdb.entity.Algorithm;
-import com.hotking.algosdb.entity.Complexity;
-import com.hotking.algosdb.entity.Tag;
-import jakarta.persistence.NamedEntityGraph;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -18,8 +14,8 @@ public interface AlgoRepository extends JpaRepository<Algorithm, Integer> {
             "from Algorithm a " +
             "join fetch a.tags t " +
             "join fetch a.complexity c " +
-            "where (t.name in (:tags) or :#{#tags.isEmpty()} = true) and " +
+            "where " +
             "(c.comp in (:complexities) or :#{#complexities.isEmpty()} = true) " +
             "order by a.id")
-    public List<Algorithm> findAlgorithmsByTagsAndComps(List<String> tags, List<String> complexities);
+    public List<Algorithm> findAlgorithmsByComps(List<String> complexities);
 }

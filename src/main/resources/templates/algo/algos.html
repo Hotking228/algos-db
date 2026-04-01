@@ -9,5 +9,28 @@
         <div th:each="algo : ${algos}">
             <a th:href="'/algo/' + ${algo.id}" th:text="${algo.id} + '. ' + ${algo.name}">Algo url</a>
         </div>
+
+        <form action="/algo/all" method="post">
+                <label for="operator">
+                    <select id="operator" name="operator">
+                        <option th:each="operator: ${operators}"
+                                th:value="${operator.name()}"
+                                th:text="${operator.name()}"
+                                th:selected="${operator.name()==chosenOperator}"></option>
+                    </select>
+                </label>
+            <div th:each="tag : ${tags}">
+                <label th:for="'tag' + ${tag.id}">
+                    <input th:id="'tag' + ${tag.id}"
+                           type="checkbox"
+                           name="selectedTags"
+                           th:text="${tag.name}"
+                           th:value="${tag.name}"
+                           th:checked="${#lists.contains(chosenTags, tag.name)}">
+                </label>
+            </div>
+
+            <button type="submit">Применить</button>
+        </form>
     </body>
 </html>
