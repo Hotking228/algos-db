@@ -6,8 +6,7 @@ services:
       - 'POSTGRES_DB=algos'
       - 'POSTGRES_PASSWORD=12345'
       - 'POSTGRES_USER=postgres'
-      - 'POSTGRES_HOST_AUTH_METHOD=trust'
     ports:
       - '5433:5432'
     volumes:
-      - '/~/algos/data:/var/lib/postgresql'
+      - 'C:\Users\minyaev_s\algos\data:/var/lib/postgresql'
