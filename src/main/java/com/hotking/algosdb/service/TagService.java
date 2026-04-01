@@ -18,6 +18,10 @@ public class TagService {
         return tagRepository.saveAndFlush(tag).getId();
     }
 
+    public List<Tag> getAll(){
+        return tagRepository.findAll();
+    }
+
     public List<Tag> getTagsByAlgo(Integer algoId){
         return tagRepository.findByAlgoId(algoId);
     }
