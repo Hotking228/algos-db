@@ -6,11 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.List;
 
 @Service
@@ -27,18 +26,16 @@ public class AlgoService {
         return algoRepository.findAlgorithmsByComps(complexities);
     }
 
-    public String getById(Integer id) {
+    public String getByIdMd(Integer id) {
         //TODO: добавить исключение
         Algorithm algo = algoRepository.findById(id).orElseThrow();
-        BufferedReader reader = null;
-        try {
-             reader = new BufferedReader(new FileReader(algo.getFilePath()));
-        } catch (FileNotFoundException e) {
+        StringBuilder sb = new StringBuilder();
+        try(BufferedReader reader = new BufferedReader(new InputStreamReader((new ClassPathResource(algo.getFilePath())).getInputStream()))) {
+
+            reader.lines().forEach(line -> {sb.append(line); sb.append("\n");});
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        StringBuilder sb = new StringBuilder();
-        reader.lines().forEach(line -> {sb.append(line); sb.append("\n");});
 
         Parser parser = Parser.builder().build();
         HtmlRenderer renderer = HtmlRenderer.builder().build();

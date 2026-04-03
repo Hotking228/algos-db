@@ -22,6 +22,11 @@ public class AlgoController {
     private final ComplexityService compService;
     private final AlgosPaginator algosPaginator;
 
+    @GetMapping("/test")
+    public String testController(Model model){
+        return "index";
+    }
+
     @GetMapping("/all")
     public String getAllAlgos(Model model){
         model.addAttribute("algos", algoService.getAlgosByTagsAndComps(algosPaginator.getTags(),
@@ -33,7 +38,7 @@ public class AlgoController {
 
         model.addAttribute("complexities", compService.getAll());
         model.addAttribute("chosenComplexities", algosPaginator.getComplexities());
-        return "/algo/algos";
+        return "algo/algos";
     }
 
     @PostMapping("/all")
@@ -52,7 +57,7 @@ public class AlgoController {
     @GetMapping("/{id}")
     public String getAlgo(Model model,
                           @PathVariable("id") Integer id){
-        model.addAttribute("content", algoService.getById(id));
-        return "/algo/algo";
+        model.addAttribute("content", algoService.getByIdMd(id));
+        return "algo/algo";
     }
 }
