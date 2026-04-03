@@ -29,6 +29,16 @@
                            th:checked="${#lists.contains(chosenTags, tag.name)}">
                 </label>
             </div>
+            <div th:each="comp : ${complexities}">
+                <label th:for="'comp' + ${comp.id}">
+                    <input th:id="'comp' + ${comp.id}"
+                           type="checkbox"
+                           name="selectedComps"
+                           th:text="${comp.comp}"
+                           th:value="${comp.comp}"
+                           th:checked="${#lists.contains(chosenComplexities, comp.comp)}">
+                </label>
+            </div>
 
             <button type="submit">Применить</button>
         </form>

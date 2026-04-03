@@ -4,14 +4,16 @@ import com.hotking.algosdb.entity.Algorithm;
 import com.hotking.algosdb.entity.Complexity;
 import com.hotking.algosdb.repository.ComplexityRepository;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ComplexityService {
-    ComplexityRepository compRepository;
+    private final ComplexityRepository compRepository;
 
     public Integer create(Complexity complexity){
         return compRepository.saveAndFlush(complexity).getId();
@@ -42,5 +44,9 @@ public class ComplexityService {
                     return id;
                 })
                 .orElse(-1);
+    }
+
+    public List<Complexity> getAll() {
+        return compRepository.findAll();
     }
 }
