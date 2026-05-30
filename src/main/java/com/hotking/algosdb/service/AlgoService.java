@@ -10,6 +10,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.util.List;
 
 @Service
@@ -66,5 +67,20 @@ public class AlgoService {
                     return id;
                 })
                 .orElse(-1);
+    }
+
+    public List<Algorithm> findAll(){
+        return algoRepository.findAll();
+    }
+
+    public String getAlgoText(Integer id) throws IOException {
+        //TODO: добавить исключение
+        String filePath = algoRepository.findById(id).orElseThrow().getFilePath();
+        File file = Path.of("src", "main", "resources", filePath).toFile();
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        StringBuilder sb = new StringBuilder();
+        reader.lines()
+                .forEach(sb::append);
+        return sb.toString();
     }
 }

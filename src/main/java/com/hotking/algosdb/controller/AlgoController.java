@@ -22,11 +22,6 @@ public class AlgoController {
     private final ComplexityService compService;
     private final AlgosPaginator algosPaginator;
 
-    @GetMapping("/test")
-    public String testController(Model model){
-        return "index";
-    }
-
     @GetMapping("/all")
     public String getAllAlgos(Model model){
         model.addAttribute("algos", algoService.getAlgosByTagsAndComps(algosPaginator.getTags(),
