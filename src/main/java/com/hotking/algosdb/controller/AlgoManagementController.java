@@ -3,20 +3,16 @@ package com.hotking.algosdb.controller;
 import com.hotking.algosdb.entity.Algorithm;
 import com.hotking.algosdb.entity.Complexity;
 import com.hotking.algosdb.entity.Tag;
-import com.hotking.algosdb.repository.AlgoRepository;
 import com.hotking.algosdb.service.AlgoService;
 import com.hotking.algosdb.service.ComplexityService;
 import com.hotking.algosdb.service.TagService;
-import jakarta.persistence.GeneratedValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -57,17 +53,14 @@ public class AlgoManagementController {
     }
 
     @PostMapping("/edit/{id}")
-    public String postAlgo(@PathVariable("id") Integer id,
+    public String editAlgo(@PathVariable("id") Integer id,
                            @RequestParam("description") String description,
                            @RequestParam("name") String name,
                            @RequestParam("newTags") List<String> tagIds,
-                           @RequestParam("newComp") List<String> compId) throws IOException {
+                           @RequestParam("newComp") String compId) throws IOException {
 
         //TODO: добавить исключение
-        Complexity comp = compId.stream()
-                .map(compService::getByName)
-                .collect(Collectors.toList())
-                .get(0);
+        Complexity comp = compService.getByName(compId);
 
         //TODO: добавить исключение
         List<Tag> tags = tagIds.stream()
@@ -80,6 +73,41 @@ public class AlgoManagementController {
                 .complexity(comp)
                 .build();
         algoService.fullUpdate(id, algo, description);
+        return "redirect:/management/algo";
+    }
+
+    @PostMapping("/del/{id}")
+    public String deleteAlgo(@PathVariable("id") Integer id){
+        algoService.delete(id);
+        return "redirect:/management/algo";
+    }
+
+    @GetMapping("/add")
+    public String showAddNewAlgo(Model model){
+        model.addAttribute("comps", compService.getAll());
+        model.addAttribute("tags", tagService.getAll());
+        return "management/addNewAlgo";
+    }
+
+    @PostMapping("/add")
+    public String addNewAlgo(@RequestParam("description") String description,
+                             @RequestParam("name") String name,
+                             @RequestParam("newTags") List<String> tagIds,
+                             @RequestParam("newComp") String compId){
+        //TODO: добавить исключение
+        Complexity comp = compService.getByName(compId);
+
+        //TODO: добавить исключение
+        List<Tag> tags = tagIds.stream()
+                .map(tagService::getByName)
+                .collect(Collectors.toList());
+        Algorithm algo = Algorithm.builder()
+                .name(name)
+                .filePath("algos/" + name + ".md")
+                .tags(tags)
+                .complexity(comp)
+                .build();
+        algoService.save(algo, description);
         return "redirect:/management/algo";
     }
 }

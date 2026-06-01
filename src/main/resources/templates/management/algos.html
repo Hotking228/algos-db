@@ -6,6 +6,9 @@
     </head>
 
     <body>
+        <form action="/management/algo/add" method="get">
+            <button type="submit">Добавить новый алгоритм</button>
+        </form>
         <div th:each="algo : ${algos}">
             <a th:href="'/algo/' + ${algo.id}" th:text="${algo.id} + '. ' + ${algo.name}">Algo url</a>
             <form th:action="'/management/algo/edit/' + ${algo.id}" method="get">

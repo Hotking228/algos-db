@@ -37,7 +37,6 @@ public class AlgoService {
         Algorithm algo = algoRepository.findById(id).orElseThrow();
         StringBuilder sb = new StringBuilder();
         try(BufferedReader reader = new BufferedReader(new InputStreamReader((new ClassPathResource(algo.getFilePath())).getInputStream()))) {
-
             reader.lines().forEach(line -> {sb.append(line); sb.append("\n");});
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -89,6 +88,7 @@ public class AlgoService {
                     sb.append(s);
                     sb.append("\n");
                 });
+        reader.close();
         return sb.toString();
     }
 
@@ -105,5 +105,18 @@ public class AlgoService {
 
     public Algorithm getByName(String name){
         return algoRepository.findAlgorithmsByName(name).get(0);
+    }
+
+    public void save(Algorithm algo, String description) {
+        File file = Path.of("src", "main", "resources", algo.getFilePath()).toFile();
+
+        try(var writer = new BufferedWriter(new FileWriter(file))){
+            file.createNewFile();
+            writer.write(description);
+        } catch (IOException e){
+
+        }
+
+        algoRepository.saveAndFlush(algo);
     }
 }

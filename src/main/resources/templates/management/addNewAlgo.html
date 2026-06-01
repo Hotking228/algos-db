@@ -6,19 +6,19 @@
 </head>
 
 <body>
-<form th:action="@{'/management/algo/edit/' + ${id}}" method="post">
+<form action="/management/algo/add" method="post">
     <div>
         <label for="name">Редактировать название:</label><br>
-        <input type="text" name="name" id="name" th:value="${name}">
+        <input type="text" name="name" id="name">
         <label for="description">Редактировать алгоритм:</label><br>
-        <textarea name="description" id="description" th:text="${description}" cols="100" rows="60">Algorithm description</textarea><br>
+        <textarea name="description" id="description" cols="100" rows="60">Algorithm description</textarea><br>
         <label for="newTags">Редактировать теги:</label>
         <div th:each="tag : ${tags}">
-            <input id="newTags" name="newTags" type="checkbox" th:checked="${#lists.contains(selectedTags, tag.name)}" th:text="${tag.name}" th:value="${tag.name}"/>
+            <input id="newTags" name="newTags" type="checkbox" th:text="${tag.name}" th:value="${tag.name}"/>
         </div>
         <label for="newComp">Редактировать сложность:</label>
         <select name="newComp" id="newComp">
-            <option th:each="comp : ${comps}" th:text="${comp.comp}" th:value="${comp.comp}" th:selected="${selectedComp == comp.comp}"></option>
+            <option th:each="comp : ${comps}" th:text="${comp.comp}" th:value="${comp.comp}"></option>
         </select>
     </div>
     <button type="submit">Подтвердить</button>
