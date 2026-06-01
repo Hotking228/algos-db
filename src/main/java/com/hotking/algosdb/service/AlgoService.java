@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +26,10 @@ public class AlgoService {
 
     public List<Algorithm> getAlgosByTagsAndComps(List<String> tags, List<String> complexities){
         return algoRepository.findAlgorithmsByComps(complexities);
+    }
+
+    public Optional<Algorithm> getById(Integer id){
+        return algoRepository.findById(id);
     }
 
     public String getByIdMd(Integer id) {
@@ -80,7 +85,24 @@ public class AlgoService {
         BufferedReader reader = new BufferedReader(new FileReader(file));
         StringBuilder sb = new StringBuilder();
         reader.lines()
-                .forEach(sb::append);
+                .forEach(s -> {
+                    sb.append(s);
+                    sb.append("\n");
+                });
         return sb.toString();
+    }
+
+    public void fullUpdate(Integer id, Algorithm algo, String description) throws IOException {
+        String filePath = getByName(algo.getName()).getFilePath();
+        algo.setFilePath(filePath);
+        update(id, algo);
+        File file = Path.of("src", "main", "resources", algo.getFilePath()).toFile();
+        file.createNewFile();
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        writer.write(description);
+    }
+
+    public Algorithm getByName(String name){
+        return algoRepository.findAlgorithmsByName(name).get(0);
     }
 }

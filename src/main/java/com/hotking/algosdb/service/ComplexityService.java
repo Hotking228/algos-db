@@ -49,4 +49,8 @@ public class ComplexityService {
     public List<Complexity> getAll() {
         return compRepository.findAll();
     }
+
+    public Complexity getByName(String comp) {
+        return compRepository.findByComp(comp).get(0);
+    }
 }

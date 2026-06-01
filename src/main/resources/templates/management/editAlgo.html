@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
 
-    <body>
-        <form action="/management/edit/{id}" method="post">
-            <div>
-                <label for="description">Редактировать алгоритм:</label><br>
-                <textarea name="description" id="description" th:text="${description}" ro>Algorithm description</textarea>
-            </div>
-            <button type="submit">Подтвердить</button>
-        </form>
-    </body>
+<body>
+<form th:action="@{'/management/algo/edit/' + ${id}}" method="post">
+    <div>
+        <label for="name">Редактировать название:</label><br>
+        <input type="text" name="name" id="name" th:value="${name}">
+        <label for="description">Редактировать алгоритм:</label><br>
+        <textarea name="description" id="description" th:text="${description}" cols="100" rows="60">Algorithm description</textarea><br>
+        <label for="newTags">Редактировать теги:</label>
+        <div th:each="tag : ${tags}">
+            <input id="newTags" name="newTags" type="checkbox" th:checked="${#lists.contains(selectedTags, tag.name)}" th:text="${tag.name}" th:value="${tag.name}"/>
+        </div>
+        <label for="newComp">Редактировать сложность:</label>
+        <div th:each="comp : ${comps}">
+            <input id="newComp" name="newComp" type="checkbox" th:checked="${selectedComp == comp.comp}" th:text="${comp.comp}" th:value="${comp.comp}"/>
+        </div>
+    </div>
+    <button type="submit">Подтвердить</button>
+</form>
+</body>
 </html>

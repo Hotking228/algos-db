@@ -52,4 +52,8 @@ public class TagService {
                 })
                 .orElse(-1);
     }
+
+    public Tag getByName(String name) {
+        return tagRepository.findByName(name).get(0);
+    }
 }

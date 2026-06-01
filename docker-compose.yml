@@ -9,7 +9,7 @@ services:
     ports:
       - '5433:5432'
     volumes:
-      - './algos/data:/var/lib/postgresql'
+      - 'C:/algos-db/data:/var/lib/postgresql'
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d algos"]
       interval: 10s
@@ -17,26 +17,26 @@ services:
       retries: 5
     networks:
       - algos-network
-  app:
-    container_name: 'algos-app'
-    image: hotking/algos-app:latest
-    ports:
-      - '8081:8081'
-    environment:
-      - SERVER_PORT=8081
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/algos
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=12345
-      - SPRING_PROFILES_ACTIVE=docker
-    depends_on:
-      postgres:
-        condition: service_healthy
-    networks:
-      - algos-network
-    restart: unless-stopped
-    volumes:
-        - ./logs:/app/logs
-
+#  app:
+#    container_name: 'algos-app'
+#    image: hotking/algos-app:latest
+#    ports:
+#      - '8081:8081'
+#    environment:
+#      - SERVER_PORT=8081
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/algos
+#      - SPRING_DATASOURCE_USERNAME=postgres
+#      - SPRING_DATASOURCE_PASSWORD=12345
+#      - SPRING_PROFILES_ACTIVE=docker
+#    depends_on:
+#      postgres:
+#        condition: service_healthy
+#    networks:
+#      - algos-network
+#    restart: unless-stopped
+#    volumes:
+#        - ./logs:/app/logs
+#
 networks:
   algos-network:
     driver: bridge
