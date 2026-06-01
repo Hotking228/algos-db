@@ -98,8 +98,9 @@ public class AlgoService {
         update(id, algo);
         File file = Path.of("src", "main", "resources", algo.getFilePath()).toFile();
         file.createNewFile();
-        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-        writer.write(description);
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(description);
+        }
     }
 
     public Algorithm getByName(String name){
