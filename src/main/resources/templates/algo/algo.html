@@ -46,6 +46,7 @@
         }
     </style>
 </head>
+    <div th:replace="~{fragments/headers/header.html :: header}"></div>
     <body>
         <!-- Используем div вместо span, так как контент может содержать блоки -->
         <div th:utext="${content}">Content will appear here</div>

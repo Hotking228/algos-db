@@ -6,6 +6,7 @@
     </head>
 
     <body>
+    <div th:replace="~{fragments/headers/header.html :: header}"></div>
         <div th:each="algo : ${algos}">
             <a th:href="'/algo/' + ${algo.id}" th:text="${algo.id} + '. ' + ${algo.name}">Algo url</a>
         </div>

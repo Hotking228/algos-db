@@ -6,6 +6,7 @@
     </head>
 
     <body>
+        <div th:replace="~{fragments/headers/header.html :: header}"></div>
         <form action="/management/algo/add" method="get">
             <button type="submit">Добавить новый алгоритм</button>
         </form>

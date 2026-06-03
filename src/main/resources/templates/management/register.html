@@ -1,11 +1,43 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-    </head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+</head>
 
-    <body>
-        
-    </body>
+<body>
+<div th:replace="~{fragments/headers/header.html :: header}"></div>
+
+<form action="#" th:action="@{/register}" th:object="${registerForm}" method="post">
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+
+    <label for="email">Электронная почта:</label>
+    <input id="email" name="email" type="text" th:field="*{email}">
+    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red"></span>
+    <br>
+
+    <label for="username">Имя пользователя:</label>
+    <input id="username" name="username" type="text" th:field="*{username}">
+    <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color: red"></span>
+    <br>
+
+    <label for="password">Пароль:</label>
+    <input id="password" name="password" type="password" th:field="*{password}">
+    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red"></span>
+    <br>
+
+    <label for="confirmPassword">Подтвердить пароль:</label>
+    <input id="confirmPassword" name="confirmPassword" type="password" th:field="*{confirmPassword}">
+    <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" style="color: red"></span>
+    <br>
+
+    <!-- Глобальные ошибки (например, PasswordMatches) -->
+    <div th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}" style="color: red">
+        <span th:text="${err}"></span>
+    </div>
+
+    <button type="submit">Подтвердить</button>
+</form>
+</body>
 </html>

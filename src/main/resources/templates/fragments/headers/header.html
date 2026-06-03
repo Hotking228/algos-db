@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+                xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+
+    <body>
+        <div th:fragment="header">
+            <div sec:authorize="isAuthenticated()">
+                <form method="post" action="/logout">
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                    <button type="submit">Выйти</button>
+                </form>
+            </div>
+
+            <div sec:authorize="!isAuthenticated()">
+                <form method="get" action="/login">
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                    <button type="submit">Войти</button>
+                </form>
+
+                <form method="get" action="/register">
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                    <button type="submit">Зарегистрироваться</button>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

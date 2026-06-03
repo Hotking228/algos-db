@@ -1,6 +1,5 @@
 package com.hotking.algosdb.service;
 
-import com.hotking.algosdb.entity.Tag;
 import com.hotking.algosdb.entity.User;
 import com.hotking.algosdb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 @RequiredArgsConstructor
@@ -51,5 +51,32 @@ public class UserService {
                     return id;
                 })
                 .orElse(-1);
+    }
+
+    public void save(User user) {
+        userRepository.saveAndFlush(user);
+    }
+
+    public boolean isUserExists(String username) {
+        AtomicBoolean exists = new AtomicBoolean(false);
+        userRepository.findAll().stream()
+                .forEach(u -> {
+                    if(username.equals(u.getUsername())){
+                        exists.set(true);
+                    }
+                });
+        return exists.get();
+    }
+
+    public boolean isEmailExists(String value) {
+        AtomicBoolean exists = new AtomicBoolean(false);
+        userRepository.findAll().stream()
+                .forEach(u -> {
+                    if(u.getEmail().equals(value)){
+                        exists.set(true);
+                    }
+                });
+
+        return exists.get();
     }
 }
