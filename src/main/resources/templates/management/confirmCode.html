@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+</head>
+
+<body>
+<div th:replace="~{fragments/headers/header.html :: header}"></div>
+
+<form action="#" th:action="@{/confirmCode}" method="post">
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+    <label for="code"></label>
+    <input type="text" name="code" id="code">
+    <span th:text="${error}"></span>
+    <button type="submit">Подтвердить</button>
+</form>
+</body>
+</html>

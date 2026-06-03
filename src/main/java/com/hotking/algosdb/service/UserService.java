@@ -53,11 +53,8 @@ public class UserService {
                 .orElse(-1);
     }
 
-    public void save(User user) {
-        userRepository.saveAndFlush(user);
-    }
-
     public boolean isUserExists(String username) {
+
         AtomicBoolean exists = new AtomicBoolean(false);
         userRepository.findAll().stream()
                 .forEach(u -> {
@@ -78,5 +75,9 @@ public class UserService {
                 });
 
         return exists.get();
+    }
+
+    public int save(User user) {
+        return userRepository.saveAndFlush(user).getId();
     }
 }
