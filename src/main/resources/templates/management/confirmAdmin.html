@@ -9,7 +9,7 @@
 <body>
 <div th:replace="~{fragments/headers/header.html :: header}"></div>
 
-<form th:action="@{/confirmCode}" method="post">
+<form th:action="@{/confirm-admin}" method="post">
     <input type="hidden" name="_csrf" th:value="${_csrf.token}">
     <label for="code"></label>
     <input type="text" name="code" id="code">

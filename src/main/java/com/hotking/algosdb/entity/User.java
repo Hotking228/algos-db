@@ -3,10 +3,7 @@ package com.hotking.algosdb.entity;
 import com.hotking.algosdb.enums.Role;
 import com.hotking.algosdb.enums.Status;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +18,7 @@ import java.util.List;
 @Builder
 @Data
 @Table(name = "users")
+@ToString
 public class User implements UserDetails {
 
     @Id

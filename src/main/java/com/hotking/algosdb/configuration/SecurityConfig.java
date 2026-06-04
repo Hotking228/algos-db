@@ -1,6 +1,7 @@
 package com.hotking.algosdb.configuration;
 
 import com.hotking.algosdb.entity.User;
+import com.hotking.algosdb.enums.Role;
 import com.hotking.algosdb.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,27 +23,29 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepo){
-        return mailOrUsername -> {
-            User user = userRepo.findByUsername(mailOrUsername);
-            if(user == null) user = userRepo.findByEmail(mailOrUsername);
-            if(user != null) return user;
-
-            throw new UsernameNotFoundException("User + '" + mailOrUsername + "' not found");
-        };
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService(UserRepository userRepo){
+//        return mailOrUsername -> {
+//            User user = userRepo.findByUsername(mailOrUsername);
+//            if(user.getRole() == Role.ADMIN){
+//
+//            }
+//            if(user == null) user = userRepo.findByEmail(mailOrUsername);
+//            if(user != null) return user;
+//
+//            throw new UsernameNotFoundException("User + '" + mailOrUsername + "' not found");
+//        };
+//    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http){
         return http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/register", "/algo/**", "/logout", "/confirmCode").permitAll()
+                        .requestMatchers("/login", "/register", "/algo/**", "/logout", "/confirmCode", "/confirm-admin").permitAll()
                         .requestMatchers("/management/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(login -> login
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/algo/all", true))
+                        .disable())
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .invalidateHttpSession(true)
