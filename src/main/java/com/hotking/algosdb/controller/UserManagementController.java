@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Controller
 @RequiredArgsConstructor
-@SessionAttributes("userId")
+@SessionAttributes(value = {"userId", "confirmCodeError"})
 public class UserManagementController {
 
     private Random rnd = new Random();
@@ -59,52 +61,61 @@ public class UserManagementController {
             return "management/register";
         }
 
-        Integer mailPass = rnd.nextInt(100_000, 1_000_000);
-        System.out.println(mailPass);
+        int mailPass = rnd.nextInt(100_000, 1_000_000);
         User user = User.builder()
                 .username(registerForm.getUsername())
                 .email(registerForm.getEmail())
                 .password(encoder.encode(registerForm.getPassword()))
                 .role(Role.USER)
                 .status(Status.PENDING)
-                .mailpassword(encoder.encode(mailPass.toString()))
+                .mailpassword(encoder.encode(Integer.toString(mailPass)))
                 .build();
-        emailService.sendMessage(user.getEmail(), "verification code", mailPass.toString());
 
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.submit(() -> {
+            emailService.sendMessage(user.getEmail(), "verification code", Integer.toString(mailPass));
+        });
+        int id = 0;
+        if(userService.isUserExists(registerForm.getUsername()) == Status.PENDING ||
+                userService.isEmailExists(registerForm.getEmail()) == Status.PENDING){
+            id = userService.update(userService.getByEmail(user.getEmail()).getId(), user);
+        } else {
+            id = userService.save(user);
+        }
 
-
-        registerForm = null;
-
-        int id = userService.save(user);
         model.addAttribute("userId", id);
+        registerForm = null;
         return "redirect:/confirmCode";
     }
 
     @GetMapping("/confirmCode")
     public String showConfirmCode(Model model,
                                   @SessionAttribute("userId") Integer userId){
-        System.out.println(userId);
         return "management/confirmCode";
     }
 
     @PostMapping("/confirmCode")
     public String confirmCode(Model model,
-                              @SessionAttribute("userId") Integer userId,
+                              @SessionAttribute(value = "userId", required = false) Integer userId,
                               @RequestParam("code") Integer code){
 
-        System.out.println(code);
-        String cryptCode = encoder.encode(code.toString());
+        model.addAttribute("confirmCodeError", "");
+        if(userId == null){
+            return "redirect:/register";
+        }
 
         User user = userService.getById(userId).get();
-        System.out.println(cryptCode);
-        System.out.println(user.getMailpassword());
         if(encoder.matches(code.toString(), user.getMailpassword())) {
+            System.out.println("matches");
             user.setStatus(Status.REGISTERED);
             user.setMailpassword(null);
-            userService.save(user);
-            return "management/login";
+            userService.update(userId, user);
+            return "redirect:/login";
         } else {
-            model.addAttribute("error", "Код подтверждения не совпадает!");
+            System.out.println(code);
+            if(!(code >= 100_000 && code < 1_000_000)){
+                model.addAttribute("confirmCodeError", "Код подтверждения не совпадает!");
+            }
             return "redirect:/confirmCode";
         }
     }

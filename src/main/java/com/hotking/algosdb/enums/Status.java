@@ -3,5 +3,6 @@ package com.hotking.algosdb.enums;
 public enum Status {
 
     PENDING,
-    REGISTERED
+    REGISTERED,
+    NOT_EXISTS
 }

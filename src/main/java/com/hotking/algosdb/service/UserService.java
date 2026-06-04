@@ -1,13 +1,16 @@
 package com.hotking.algosdb.service;
 
 import com.hotking.algosdb.entity.User;
+import com.hotking.algosdb.enums.Status;
 import com.hotking.algosdb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +41,8 @@ public class UserService {
         user.setRole(userFromController.getRole());
         user.setPassword(userFromController.getPassword());
         user.setUsername(userFromController.getUsername());
+        user.setMailpassword(userFromController.getMailpassword());
+        user.setStatus(userFromController.getStatus());
         userRepository.saveAndFlush(user);
         return user.getId();
     }
@@ -53,24 +58,23 @@ public class UserService {
                 .orElse(-1);
     }
 
-    public boolean isUserExists(String username) {
-
-        AtomicBoolean exists = new AtomicBoolean(false);
+    public Status isUserExists(String username) {
+        AtomicReference<Status> exists = new AtomicReference<>(Status.NOT_EXISTS);
         userRepository.findAll().stream()
                 .forEach(u -> {
                     if(username.equals(u.getUsername())){
-                        exists.set(true);
+                        exists.set(u.getStatus());
                     }
                 });
         return exists.get();
     }
 
-    public boolean isEmailExists(String value) {
-        AtomicBoolean exists = new AtomicBoolean(false);
+    public Status isEmailExists(String value) {
+        AtomicReference<Status> exists = new AtomicReference<>(Status.NOT_EXISTS);
         userRepository.findAll().stream()
                 .forEach(u -> {
                     if(u.getEmail().equals(value)){
-                        exists.set(true);
+                        exists.set(u.getStatus());
                     }
                 });
 
@@ -79,5 +83,9 @@ public class UserService {
 
     public int save(User user) {
         return userRepository.saveAndFlush(user).getId();
+    }
+
+    public User getByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }

@@ -24,11 +24,12 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepo){
-        return username -> {
-            User user = userRepo.findByUsername(username);
+        return mailOrUsername -> {
+            User user = userRepo.findByUsername(mailOrUsername);
+            if(user == null) user = userRepo.findByEmail(mailOrUsername);
             if(user != null) return user;
 
-            throw new UsernameNotFoundException("User + '" + username + "' not found");
+            throw new UsernameNotFoundException("User + '" + mailOrUsername + "' not found");
         };
     }
 

@@ -1,5 +1,6 @@
 package com.hotking.algosdb.validation.username;
 
+import com.hotking.algosdb.enums.Status;
 import com.hotking.algosdb.service.UserService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -15,7 +16,7 @@ public class UserExistsValidator
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if(userService.isUserExists(value)) return false;
+        if(userService.isUserExists(value) == Status.REGISTERED) return false;
         return true;
     }
 }
