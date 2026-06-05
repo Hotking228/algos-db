@@ -3,6 +3,29 @@
     <head>
         <meta charset="UTF-8">
         <title>Title</title>
+        <style>
+            .page-button-container{
+                display: flex;
+                flex-wrap: wrap;/* Перенос на новую строку */
+                gap: 10px;/* Расстояние между объектами */
+                max-width: 100%;
+
+                margin: 5px;
+                border-radius: 10px;
+                background-color: #eaeaea;
+                /*height: 120px;*/
+                width: 500px;
+                padding-left: 20px;
+                padding-top: 20px;
+                padding-bottom: 20px;
+            }
+
+            .page-button{
+                border-radius: 5px;
+                width: 24px;
+                height: 24px;
+            }
+        </style>
     </head>
 
     <body>
@@ -11,7 +34,21 @@
             <a th:href="'/algo/' + ${algo.id}" th:text="${algo.id} + '. ' + ${algo.name}">Algo url</a>
         </div>
 
+        <div class="page-button-container">
+            <div th:each="i : ${#numbers.sequence(0, pageNums, 1)}">
+                <form th:action="@{'/algo/all/' + ${i}}"
+                      method="post">
+
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                    <input type="hidden" th:value="${i}" name="pageNum">
+                    <button type="submit" th:text="${i + 1}" class="page-button">Номер страницы</button>
+                </form>
+            </div>
+        </div>
+
+
         <form action="/algo/all" method="post">
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}">
                 <label for="operator">
                     <select id="operator" name="operator">
                         <option th:each="operator: ${operators}"

@@ -3,6 +3,8 @@ package com.hotking.algosdb.controller;
 import com.hotking.algosdb.entity.Algorithm;
 import com.hotking.algosdb.entity.Complexity;
 import com.hotking.algosdb.entity.Tag;
+import com.hotking.algosdb.paginator.AlgosPaginator;
+import com.hotking.algosdb.paginator.PageProperties;
 import com.hotking.algosdb.service.AlgoService;
 import com.hotking.algosdb.service.ComplexityService;
 import com.hotking.algosdb.service.TagService;
@@ -23,11 +25,22 @@ public class AlgoManagementController {
     private final AlgoService algoService;
     private final TagService tagService;
     private final ComplexityService compService;
+    private final AlgosPaginator algosPaginator;
+    private final PageProperties pageProperties;
 
     @GetMapping
     public String showAlgos(Model model){
-        model.addAttribute("algos", algoService.findAll());
+        model.addAttribute("algos", algosPaginator.paginate(
+                algoService.getAlgosByTagsAndComps(algosPaginator.getTags(),
+                        algosPaginator.getComplexities())));
+        model.addAttribute("pageNums",algosPaginator.getPageNums());
         return "management/algos";
+    }
+
+    @PostMapping("/{pageNum}")
+    public String setPage(@PathVariable("pageNum") Integer pageNum){
+        pageProperties.setNum(pageNum);
+        return "redirect:/management/algo";
     }
 
     @GetMapping("/edit/{id}")

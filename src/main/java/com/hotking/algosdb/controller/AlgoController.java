@@ -2,6 +2,7 @@ package com.hotking.algosdb.controller;
 
 import com.hotking.algosdb.enums.TagOperator;
 import com.hotking.algosdb.paginator.AlgosPaginator;
+import com.hotking.algosdb.paginator.PageProperties;
 import com.hotking.algosdb.service.AlgoService;
 import com.hotking.algosdb.service.ComplexityService;
 import com.hotking.algosdb.service.TagService;
@@ -21,11 +22,13 @@ public class AlgoController {
     private final TagService tagService;
     private final ComplexityService compService;
     private final AlgosPaginator algosPaginator;
+    private final PageProperties pageProperties;
 
     @GetMapping("/all")
     public String getAllAlgos(Model model){
-        model.addAttribute("algos", algoService.getAlgosByTagsAndComps(algosPaginator.getTags(),
-                algosPaginator.getComplexities()));
+        model.addAttribute("algos", algosPaginator.paginate(algoService.getAlgosByTagsAndComps(algosPaginator.getTags(),
+                algosPaginator.getComplexities())));
+        model.addAttribute("pageNums", algosPaginator.getPageNums());
         model.addAttribute("tags", tagService.getAll());
         model.addAttribute("operators", TagOperator.values());
         model.addAttribute("chosenTags", algosPaginator.getTags());
@@ -46,6 +49,12 @@ public class AlgoController {
         if(comps != null)algosPaginator.setComplexities(comps);
         else algosPaginator.setComplexities(List.of());
         algosPaginator.setTagOperator(operator);
+        return "redirect:/algo/all";
+    }
+
+    @PostMapping("/all/{pageNum}")
+    public String setPageNum(@PathVariable("pageNum") Integer pageNum){
+        pageProperties.setNum(pageNum);
         return "redirect:/algo/all";
     }
 

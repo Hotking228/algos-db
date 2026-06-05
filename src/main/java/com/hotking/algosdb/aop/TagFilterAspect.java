@@ -4,7 +4,9 @@ import com.hotking.algosdb.entity.Algorithm;
 import com.hotking.algosdb.entity.Tag;
 import com.hotking.algosdb.enums.TagOperator;
 import com.hotking.algosdb.paginator.AlgosPaginator;
+import com.hotking.algosdb.paginator.PageProperties;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Aspect
 @Component
@@ -19,11 +22,16 @@ import java.util.Objects;
 public class TagFilterAspect {
 
     private final AlgosPaginator algosPaginator;
+    private final PageProperties pageProperties;
 
     @AfterReturning(value = "execution(* com.hotking.algosdb.service.AlgoService.getAlgosByTagsAndComps(..))", returning = "result")
-    public void filterByTags(List<Algorithm> result){
+    public List<Algorithm> filterByTags(List<Algorithm> result){
         var origin = result;
-        if(algosPaginator.getTags().isEmpty()) return;
+
+        if(algosPaginator.getTags().isEmpty()) {
+            algosPaginator.setPageNums(result.size() / pageProperties.getSize());
+            return result;
+        }
 
         result = result.stream()
                 .filter(algo -> {
@@ -56,5 +64,7 @@ public class TagFilterAspect {
 
         origin.clear();
         origin.addAll(result);
+        algosPaginator.setPageNums(origin.size() / pageProperties.getSize());
+        return origin;
     }
 }
