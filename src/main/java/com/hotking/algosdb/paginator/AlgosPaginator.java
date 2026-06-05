@@ -17,4 +17,5 @@ public class AlgosPaginator {
     private List<String> tags = new ArrayList<>();
     private List<String> complexities = new ArrayList<>();
     private String tagOperator = TagOperator.OR.name();
+
 }

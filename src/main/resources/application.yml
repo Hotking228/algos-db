@@ -1,3 +1,5 @@
+page:
+  default-size: 10
 spring:
   mail:
     host: smtp.gmail.com
