@@ -3,41 +3,274 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Регистрация</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlgoDB - Регистрация</title>
+
+    <style>
+        /* ---------- DARK THEME RESET ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            padding: 0;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #0a0c10;
+            color: #e2e8f0;
+        }
+
+        /* ========== MAIN CONTENT STYLES ========== */
+        .register-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0 2rem 3rem 2rem;
+        }
+
+        .register-card {
+            background: #111316;
+            border-radius: 28px;
+            border: 1px solid #23262e;
+            padding: 2rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .register-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #f1f5f9;
+            text-align: center;
+        }
+
+        .register-subtitle {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #23262e;
+        }
+
+        /* form groups */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            background: #1a1d24;
+            border: 1px solid #2d313a;
+            border-radius: 12px;
+            color: #e2e8f0;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .form-group input::placeholder {
+            color: #4a5568;
+        }
+
+        /* error message */
+        .error-message {
+            background: rgba(127, 29, 29, 0.15);
+            border: 1px solid #7f1a1a;
+            border-radius: 10px;
+            padding: 8px 12px;
+            margin-top: 0.5rem;
+            color: #fecaca;
+            font-size: 0.8rem;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .field-error {
+            margin-top: 0.5rem;
+        }
+
+        /* global error */
+        .global-error {
+            background: rgba(127, 29, 29, 0.15);
+            border: 1px solid #7f1a1a;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 1.5rem;
+            color: #fecaca;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        /* submit button */
+        .submit-button {
+            width: 100%;
+            background: #3b82f6;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: 0.3px;
+            font-family: inherit;
+            margin-top: 0.5rem;
+        }
+
+        .submit-button:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px -6px rgba(59, 130, 246, 0.4);
+        }
+
+        .submit-button:active {
+            transform: translateY(1px);
+        }
+
+        /* login link */
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .login-link a {
+            color: #60a5fa;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .login-link a:hover {
+            color: #93c5fd;
+            text-decoration: underline;
+        }
+
+        /* responsive */
+        @media (max-width: 640px) {
+            .register-container {
+                padding: 0 1rem 2rem 1rem;
+            }
+
+            .register-card {
+                padding: 1.5rem;
+            }
+
+            .register-title {
+                font-size: 1.5rem;
+            }
+
+            .form-group input {
+                padding: 12px 14px;
+            }
+
+            .submit-button {
+                padding: 12px 24px;
+            }
+        }
+
+        /* scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0c10;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2d313a;
+            border-radius: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3f4552;
+        }
+    </style>
 </head>
 
 <body>
+<!-- header fragment -->
 <div th:replace="~{fragments/headers/header.html :: header}"></div>
 
-<form action="#" th:action="@{/register}" th:object="${registerForm}" method="post">
-    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+<div class="register-container">
+    <div class="register-card">
+        <div class="register-title">Создать аккаунт</div>
+        <div class="register-subtitle">Зарегистрируйтесь для доступа к алгоритмам</div>
 
-    <label for="email">Электронная почта:</label>
-    <input id="email" name="email" type="text" th:field="*{email}">
-    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red"></span>
-    <br>
+        <form action="#" th:action="@{/register}" th:object="${registerForm}" method="post">
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}">
 
-    <label for="username">Имя пользователя:</label>
-    <input id="username" name="username" type="text" th:field="*{username}">
-    <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color: red"></span>
-    <br>
+            <!-- email -->
+            <div class="form-group">
+                <label for="email">Электронная почта</label>
+                <input id="email" name="email" type="email" th:field="*{email}" placeholder="example@mail.com">
+                <div th:if="${#fields.hasErrors('email')}" class="error-message">
+                    <span th:errors="*{email}"></span>
+                </div>
+            </div>
 
-    <label for="password">Пароль:</label>
-    <input id="password" name="password" type="password" th:field="*{password}">
-    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red"></span>
-    <br>
+            <!-- username -->
+            <div class="form-group">
+                <label for="username">Имя пользователя</label>
+                <input id="username" name="username" type="text" th:field="*{username}" placeholder="Введите username...">
+                <div th:if="${#fields.hasErrors('username')}" class="error-message">
+                    <span th:errors="*{username}"></span>
+                </div>
+            </div>
 
-    <label for="confirmPassword">Подтвердить пароль:</label>
-    <input id="confirmPassword" name="confirmPassword" type="password" th:field="*{confirmPassword}">
-    <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" style="color: red"></span>
-    <br>
+            <!-- password -->
+            <div class="form-group">
+                <label for="password">Пароль</label>
+                <input id="password" name="password" type="password" th:field="*{password}" placeholder="Введите пароль...">
+                <div th:if="${#fields.hasErrors('password')}" class="error-message">
+                    <span th:errors="*{password}"></span>
+                </div>
+            </div>
 
-    <!-- Глобальные ошибки (например, PasswordMatches) -->
-    <div th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}" style="color: red">
-        <span th:text="${err}"></span>
+            <!-- confirm password -->
+            <div class="form-group">
+                <label for="confirmPassword">Подтвердить пароль</label>
+                <input id="confirmPassword" name="confirmPassword" type="password" th:field="*{confirmPassword}" placeholder="Повторите пароль...">
+                <div th:if="${#fields.hasErrors('confirmPassword')}" class="error-message">
+                    <span th:errors="*{confirmPassword}"></span>
+                </div>
+            </div>
+
+            <!-- Глобальные ошибки (например, PasswordMatches) -->
+            <div th:if="${#fields.hasGlobalErrors()}" class="global-error">
+                <span th:each="err : ${#fields.globalErrors()}" th:text="${err}"></span>
+            </div>
+
+            <button type="submit" class="submit-button">Зарегистрироваться</button>
+        </form>
+
+        <div class="login-link">
+            Уже есть аккаунт? <a href="/login">Войти</a>
+        </div>
     </div>
-
-    <button type="submit">Подтвердить</button>
-</form>
+</div>
 </body>
 </html>

@@ -1,24 +1,236 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlgoDB - Вход</title>
 
-    <body>
-        <div th:replace="~{fragments/headers/header.html :: header}"></div>
-        <h1>Вход</h1>
+    <style>
+        /* ---------- DARK THEME RESET ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            padding: 0;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #0a0c10;
+            color: #e2e8f0;
+        }
+
+        /* ========== MAIN CONTENT STYLES ========== */
+        .login-container {
+            max-width: 450px;
+            margin: 0 auto;
+            padding: 0 2rem 3rem 2rem;
+        }
+
+        .login-card {
+            background: #111316;
+            border-radius: 28px;
+            border: 1px solid #23262e;
+            padding: 2rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #f1f5f9;
+            text-align: center;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #23262e;
+        }
+
+        /* form groups */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            background: #1a1d24;
+            border: 1px solid #2d313a;
+            border-radius: 12px;
+            color: #e2e8f0;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .form-group input::placeholder {
+            color: #4a5568;
+        }
+
+        /* error message */
+        .error-message {
+            background: rgba(127, 29, 29, 0.15);
+            border: 1px solid #7f1a1a;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 1.5rem;
+            color: #fecaca;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        /* submit button */
+        .submit-button {
+            width: 100%;
+            background: #3b82f6;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: 0.3px;
+            font-family: inherit;
+        }
+
+        .submit-button:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px -6px rgba(59, 130, 246, 0.4);
+        }
+
+        .submit-button:active {
+            transform: translateY(1px);
+        }
+
+        /* register link */
+        .register-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .register-link a {
+            color: #60a5fa;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .register-link a:hover {
+            color: #93c5fd;
+            text-decoration: underline;
+        }
+
+        /* responsive */
+        @media (max-width: 640px) {
+            .login-container {
+                padding: 0 1rem 2rem 1rem;
+            }
+
+            .login-card {
+                padding: 1.5rem;
+            }
+
+            .login-title {
+                font-size: 1.5rem;
+            }
+
+            .form-group input {
+                padding: 12px 14px;
+            }
+
+            .submit-button {
+                padding: 12px 24px;
+            }
+        }
+
+        /* scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0c10;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2d313a;
+            border-radius: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3f4552;
+        }
+    </style>
+</head>
+
+<body>
+<!-- header fragment -->
+<div th:replace="~{fragments/headers/header.html :: header}"></div>
+
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-title">Добро пожаловать</div>
+        <div class="login-subtitle">Войдите в свой аккаунт</div>
 
         <form method="post" action="/login" id="loginForm">
             <input type="hidden" name="_csrf" th:value="${_csrf.token}">
-            <label for="username">Username: </label>
-            <input type="text" name="username" id="username"/><br/>
 
-            <label for="password">Password: </label>
-            <input type="password" name="password" id="password"/><br/>
+            <div class="form-group">
+                <label for="username">Имя пользователя</label>
+                <input type="text" name="username" id="username" placeholder="Введите username..." autofocus>
+            </div>
 
-            <input type="submit" value="Войти">
+            <div class="form-group">
+                <label for="password">Пароль</label>
+                <input type="password" name="password" id="password" placeholder="Введите пароль...">
+            </div>
 
+            <!-- ошибка авторизации (Spring Security) -->
+            <div th:if="${param.error}" class="error-message">
+                Неверное имя пользователя или пароль
+            </div>
+
+            <!-- сообщение о выходе -->
+            <div th:if="${param.logout}" class="error-message" style="background: rgba(5, 150, 105, 0.15); border-color: #059669; color: #6ee7b7;">
+                Вы успешно вышли из системы
+            </div>
+
+            <button type="submit" class="submit-button">Войти</button>
         </form>
-    </body>
+
+        <div class="register-link">
+            Нет аккаунта? <a href="/register">Зарегистрироваться</a>
+        </div>
+    </div>
+</div>
+</body>
 </html>

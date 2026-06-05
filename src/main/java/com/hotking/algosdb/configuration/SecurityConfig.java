@@ -41,6 +41,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http){
         return http
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/").denyAll()
                         .requestMatchers("/login", "/register", "/algo/**", "/logout", "/confirmCode", "/confirm-admin").permitAll()
                         .requestMatchers("/management/**").hasRole("ADMIN")
                         .anyRequest().authenticated())

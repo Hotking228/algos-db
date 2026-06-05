@@ -1,31 +1,41 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-                xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-    </head>
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header</title>
+</head>
+<body>
+<div th:fragment="header">
+    <div style="background: #0a0c10; border-bottom: 1px solid #23262e; padding: 0.75rem 2rem; margin-bottom: 2rem; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(8px); background: rgba(10, 12, 16, 0.95);">
+        <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: flex-end; align-items: center; gap: 1rem; flex-wrap: wrap;">
 
-    <body>
-        <div th:fragment="header">
-            <div sec:authorize="isAuthenticated()">
-                <form method="post" action="/logout">
+            <!-- Логотип -->
+            <div style="font-weight: 600; font-size: 1.1rem; color: #e2e8f0; margin-right: auto; letter-spacing: -0.3px;">AlgoDB</div>
+
+            <!-- Авторизован -->
+            <div sec:authorize="isAuthenticated()" style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+                <form method="post" action="/logout" style="margin: 0;">
                     <input type="hidden" name="_csrf" th:value="${_csrf.token}">
-                    <button type="submit">Выйти</button>
+                    <button type="submit" style="padding: 0.5rem 1.5rem; border-radius: 40px; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease; border: 1px solid #7f1a1a; background: rgba(127, 29, 29, 0.15); color: #fecaca; font-family: inherit; letter-spacing: 0.2px;">Выйти</button>
                 </form>
             </div>
 
-            <div sec:authorize="!isAuthenticated()">
-                <form method="get" action="/login">
+            <!-- Не авторизован -->
+            <div sec:authorize="!isAuthenticated()" style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+                <form method="get" action="/login" style="margin: 0;">
                     <input type="hidden" name="_csrf" th:value="${_csrf.token}">
-                    <button type="submit">Войти</button>
+                    <button type="submit" style="padding: 0.5rem 1.5rem; border-radius: 40px; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease; border: 1px solid #3b82f6; background: rgba(37, 99, 235, 0.1); color: #93c5fd; font-family: inherit; letter-spacing: 0.2px;">Войти</button>
                 </form>
 
-                <form method="get" action="/register">
+                <form method="get" action="/register" style="margin: 0;">
                     <input type="hidden" name="_csrf" th:value="${_csrf.token}">
-                    <button type="submit">Зарегистрироваться</button>
+                    <button type="submit" style="padding: 0.5rem 1.5rem; border-radius: 40px; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease; border: 1px solid #059669; background: rgba(5, 150, 105, 0.1); color: #6ee7b7; font-family: inherit; letter-spacing: 0.2px;">Зарегистрироваться</button>
                 </form>
             </div>
         </div>
-    </body>
+    </div>
+</div>
+</body>
 </html>

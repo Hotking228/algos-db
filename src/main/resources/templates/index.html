@@ -1,11 +1,405 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlgoDB - ✨ Test Page ✨</title>
 
-    <body>
-        TEST
-    </body>
+    <style>
+        /* ---------- DARK THEME RESET ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            padding: 0;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #0a0c10;
+            color: #e2e8f0;
+        }
+
+        /* ========== HEADER STYLES ========== */
+        .header-container {
+            background: #0a0c10;
+            border-bottom: 1px solid #23262e;
+            padding: 0.75rem 2rem;
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+            background: rgba(10, 12, 16, 0.95);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .header-content::before {
+            content: "AlgoDB";
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #e2e8f0;
+            margin-right: auto;
+            letter-spacing: -0.3px;
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem 3rem 2rem;
+        }
+
+        .test-card {
+            background: #111316;
+            border-radius: 28px;
+            border: 1px solid #23262e;
+            padding: 2.5rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        /* анимированный заголовок */
+        .glitch-title {
+            font-size: 4rem;
+            font-weight: 800;
+            color: #3b82f6;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 1rem;
+            animation: glitch 1s infinite;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .glitch-title:hover {
+            animation: none;
+            text-shadow: 0 0 10px #3b82f6, 0 0 20px #2563eb;
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: skew(0deg, 0deg); opacity: 1; }
+            95% { transform: skew(0deg, 0deg); opacity: 1; }
+            96% { transform: skew(5deg, 2deg); opacity: 0.8; text-shadow: -2px 0 #ef4444; }
+            97% { transform: skew(-5deg, -2deg); opacity: 0.9; text-shadow: 2px 0 #3b82f6; }
+            98% { transform: skew(3deg, 1deg); opacity: 0.85; }
+            99% { transform: skew(-3deg, -1deg); opacity: 0.95; }
+        }
+
+        /* подзаголовок с печатной машинкой */
+        .typewriter {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            border-right: 2px solid #3b82f6;
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: blink 0.75s step-end infinite;
+        }
+
+        @keyframes blink {
+            from, to { border-color: transparent; }
+            50% { border-color: #3b82f6; }
+        }
+
+        /* красивая кнопка-счётчик */
+        .magic-button {
+            background: linear-gradient(135deg, #1a1d24 0%, #111316 100%);
+            border: 1px solid #3b82f6;
+            padding: 14px 32px;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #93c5fd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 0;
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .magic-button:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            color: white;
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.5);
+            border-color: #60a5fa;
+        }
+
+        .magic-button:active {
+            transform: scale(0.98);
+        }
+
+        /* счётчик кликов */
+        .counter {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #facc15;
+            margin: 20px 0;
+            font-family: monospace;
+        }
+
+        /* цитаты */
+        .quote-box {
+            margin-top: 30px;
+            padding: 20px;
+            background: #1a1d24;
+            border-radius: 20px;
+            border-left: 4px solid #3b82f6;
+            font-style: italic;
+            color: #cbd5e1;
+            transition: all 0.3s;
+        }
+
+        .quote-text {
+            font-size: 1rem;
+        }
+
+        .quote-author {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: #6c7a91;
+            text-align: right;
+        }
+
+        /* секретная панель */
+        .secret-panel {
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 16px;
+            border: 1px dashed #3b82f6;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .secret-panel:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* статус-бар */
+        .status-bar {
+            margin-top: 30px;
+            padding: 10px;
+            background: #1a1d24;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            color: #6c7a91;
+            text-align: center;
+            font-family: monospace;
+        }
+
+        /* responsive */
+        @media (max-width: 640px) {
+            .test-container {
+                padding: 0 1rem 2rem 1rem;
+            }
+            .test-card {
+                padding: 1.5rem;
+            }
+            .glitch-title {
+                font-size: 2.5rem;
+            }
+            .typewriter {
+                font-size: 0.9rem;
+                white-space: normal;
+                border-right: none;
+                animation: none;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0c10;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2d313a;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3b82f6;
+        }
+    </style>
+</head>
+<body>
+
+<!-- фейковый header (как везде) -->
+<div class="header-container">
+    <div class="header-content"></div>
+</div>
+
+<div class="test-container">
+    <div class="test-card">
+        <!-- глитч-заголовок -->
+        <div class="glitch-title" onclick="this.style.animation='none'; setTimeout(()=>this.style.animation='glitch 1s infinite', 100)">
+            ⚡ TEST MODE ⚡
+        </div>
+
+        <!-- печатная машинка -->
+        <div class="typewriter" id="typewriter"></div>
+
+        <!-- магическая кнопка -->
+        <button class="magic-button" id="magicBtn" onclick="handleMagic()">
+            ✨ Нажми на меня ✨
+        </button>
+
+        <!-- счётчик -->
+        <div class="counter" id="counter">0</div>
+
+        <!-- цитата -->
+        <div class="quote-box" id="quoteBox">
+            <div class="quote-text" id="quoteText">"Лучший способ предсказать будущее — создать его"</div>
+            <div class="quote-author" id="quoteAuthor">— Алан Кей</div>
+        </div>
+
+        <!-- секретная панель -->
+        <div class="secret-panel" id="secretPanel" onclick="showSecret()">
+            🔒 Секретная зона (нажми, чтобы раскрыть)
+        </div>
+
+        <!-- статус-бар -->
+        <div class="status-bar" id="statusBar">
+            🟢 Система: Онлайн | Версия 1.0.0 | AlgoDB Test Environment
+        </div>
+    </div>
+</div>
+
+<script>
+    // счётчик кликов
+    let clickCount = 0;
+    const counterEl = document.getElementById('counter');
+    const magicBtn = document.getElementById('magicBtn');
+
+    // массив крутых цитат
+    const quotes = [
+        { text: "Код — это поэзия, написанная логикой", author: "— Народная мудрость" },
+        { text: "Преждевременная оптимизация — корень всех зол", author: "— Дональд Кнут" },
+        { text: "Простота — высшая степень sophistication", author: "— Леонардо да Винчи" },
+        { text: "Любой дурак может написать код, понятный компьютеру. Хорошие программисты пишут код, понятный людям", author: "— Мартин Фаулер" },
+        { text: "Тестирование — доказательство наличия ошибок, а не их отсутствия", author: "— Эдсгер Дейкстра" },
+        { text: "Думай как пользователь, проектируй как разработчик", author: "— Аноним" },
+        { text: "Программирование — это искусство говорить компьютеру, что делать", author: "— Алан Тьюринг" },
+        { text: "Документация — как секс: когда она хороша, она прекрасна, когда плоха — лучше, чем ничего", author: "— Питер Линч" },
+    ];
+
+    // текст для печатной машинки
+    const typeStrings = [
+        "> System: OK",
+        "> Database: Connected",
+        "> Dark mode: Enabled",
+        "> Ready for magic...",
+        "> Welcome to AlgoDB!"
+    ];
+
+    let typeIndex = 0;
+    let charIndex = 0;
+    const typewriterEl = document.getElementById('typewriter');
+
+    function typeWriter() {
+        if (charIndex < typeStrings[typeIndex].length) {
+            typewriterEl.textContent += typeStrings[typeIndex].charAt(charIndex);
+            charIndex++;
+            setTimeout(typeWriter, 80);
+        } else {
+            setTimeout(() => {
+                typewriterEl.textContent = '';
+                charIndex = 0;
+                typeIndex = (typeIndex + 1) % typeStrings.length;
+                typeWriter();
+            }, 2000);
+        }
+    }
+
+    // магия при клике
+    function handleMagic() {
+        clickCount++;
+        counterEl.textContent = clickCount;
+
+        // меняем цитату при каждом 5-м клике
+        if (clickCount % 5 === 0) {
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('quoteText').textContent = `"${randomQuote.text}"`;
+            document.getElementById('quoteAuthor').textContent = randomQuote.author;
+
+            // анимация для цитаты
+            const quoteBox = document.getElementById('quoteBox');
+            quoteBox.style.transform = 'scale(1.02)';
+            setTimeout(() => {
+                quoteBox.style.transform = 'scale(1)';
+            }, 300);
+        }
+
+        // эффект при клике
+        magicBtn.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            magicBtn.style.transform = '';
+        }, 150);
+
+        // обновляем статус
+        if (clickCount === 10) {
+            document.getElementById('statusBar').innerHTML = '🟡 Система: Наблюдается высокая активность | Кликов: ' + clickCount;
+        } else if (clickCount === 20) {
+            document.getElementById('statusBar').innerHTML = '🔴 Система: КРИТИЧЕСКАЯ АКТИВНОСТЬ! Ты безумец! | Кликов: ' + clickCount;
+            document.getElementById('statusBar').style.background = 'rgba(127, 29, 29, 0.3)';
+        } else if (clickCount === 30) {
+            document.getElementById('statusBar').innerHTML = '💀 System: Overload... перезагрузка? Шучу, продолжай 💀';
+        } else if (clickCount === 42) {
+            document.getElementById('statusBar').innerHTML = '🌌 42 — Ответ на главный вопрос жизни, вселенной и всего такого 🌌';
+        }
+
+        // поздравление
+        if (clickCount === 50) {
+            alert('🔥 ТЫ ГЕРОЙ! 50 кликов! Секретная зона разблокирована! 🔥');
+            document.getElementById('secretPanel').style.background = 'rgba(59, 130, 246, 0.3)';
+            document.getElementById('secretPanel').style.border = '1px solid #facc15';
+        }
+    }
+
+    // секретная панель
+    function showSecret() {
+        const panel = document.getElementById('secretPanel');
+        if (panel.innerHTML.includes('🔒')) {
+            panel.innerHTML = '🎉 ПОЗДРАВЛЯЮ! 🎉<br>Ты нашёл секретную зону!<br><br>🌟 AlgoDB — лучшая платформа для изучения алгоритмов! 🌟<br><br><small>Кликни сюда ещё раз, чтобы вернуть</small>';
+            panel.style.background = 'rgba(245, 158, 11, 0.2)';
+            panel.style.border = '1px solid #f59e0b';
+        } else if (panel.innerHTML.includes('🎉')) {
+            panel.innerHTML = '🔒 Секретная зона (нажми, чтобы раскрыть)';
+            panel.style.background = 'rgba(59, 130, 246, 0.1)';
+            panel.style.border = '1px dashed #3b82f6';
+        }
+    }
+
+    // запускаем печатную машинку
+    typeWriter();
+
+    // добавляем эффект на глитч-заголовок
+    setInterval(() => {
+        const title = document.querySelector('.glitch-title');
+        if (!title.style.animation) {
+            title.style.animation = 'glitch 1s infinite';
+        }
+    }, 5000);
+</script>
+
+</body>
 </html>
