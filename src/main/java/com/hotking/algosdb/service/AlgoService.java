@@ -36,7 +36,8 @@ public class AlgoService {
         //TODO: добавить исключение
         Algorithm algo = algoRepository.findById(id).orElseThrow();
         StringBuilder sb = new StringBuilder();
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader((new ClassPathResource(algo.getFilePath())).getInputStream()))) {
+        File file = Path.of(algo.getFilePath()).toFile();
+        try(BufferedReader reader = new BufferedReader(new FileReader(file))) {
             reader.lines().forEach(line -> {sb.append(line); sb.append("\n");});
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -80,23 +81,24 @@ public class AlgoService {
     public String getAlgoText(Integer id) throws IOException {
         //TODO: добавить исключение
         String filePath = algoRepository.findById(id).orElseThrow().getFilePath();
-        File file = Path.of("src", "main", "resources", filePath).toFile();
-        BufferedReader reader = new BufferedReader(new FileReader(file));
+        File file = Path.of(filePath).toFile();
         StringBuilder sb = new StringBuilder();
-        reader.lines()
-                .forEach(s -> {
-                    sb.append(s);
-                    sb.append("\n");
-                });
-        reader.close();
+        try(BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            reader.lines()
+                    .forEach(s -> {
+                        sb.append(s);
+                        sb.append("\n");
+                    });
+        }
         return sb.toString();
     }
 
     public void fullUpdate(Integer id, Algorithm algo, String description) throws IOException {
         String filePath = getByName(algo.getName()).getFilePath();
+        System.out.println(filePath);
         algo.setFilePath(filePath);
+        File file = Path.of(algo.getFilePath()).toFile();
         update(id, algo);
-        File file = Path.of("src", "main", "resources", algo.getFilePath()).toFile();
         file.createNewFile();
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(description);
@@ -108,7 +110,7 @@ public class AlgoService {
     }
 
     public void save(Algorithm algo, String description) {
-        File file = Path.of("src", "main", "resources", algo.getFilePath()).toFile();
+        File file = Path.of(algo.getFilePath()).toFile();
 
         try(var writer = new BufferedWriter(new FileWriter(file))){
             file.createNewFile();

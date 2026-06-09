@@ -25,12 +25,12 @@
             <!-- Не авторизован -->
             <div sec:authorize="!isAuthenticated()" style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
                 <form method="get" action="/login" style="margin: 0;">
-                    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+<!--                    <input type="hidden" name="_csrf" th:value="${_csrf.token}">-->
                     <button type="submit" style="padding: 0.5rem 1.5rem; border-radius: 40px; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease; border: 1px solid #3b82f6; background: rgba(37, 99, 235, 0.1); color: #93c5fd; font-family: inherit; letter-spacing: 0.2px;">Войти</button>
                 </form>
 
                 <form method="get" action="/register" style="margin: 0;">
-                    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+<!--                    <input type="hidden" name="_csrf" th:value="${_csrf.token}">-->
                     <button type="submit" style="padding: 0.5rem 1.5rem; border-radius: 40px; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease; border: 1px solid #059669; background: rgba(5, 150, 105, 0.1); color: #6ee7b7; font-family: inherit; letter-spacing: 0.2px;">Зарегистрироваться</button>
                 </form>
             </div>
