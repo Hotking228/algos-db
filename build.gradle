@@ -53,6 +53,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-security-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-thymeleaf-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.assertj:assertj-core'
 
     developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 }
