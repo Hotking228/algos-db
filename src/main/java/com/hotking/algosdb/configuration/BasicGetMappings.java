@@ -10,5 +10,6 @@ public class BasicGetMappings implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/login").setViewName("management/login");
+        registry.addViewController("/suggest/token").setViewName("management/oauth2token");
     }
 }

@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>AlgoDB - Вход</title>
 
     <style>
@@ -190,6 +192,7 @@
             background: #3f4552;
         }
     </style>
+    <script src="https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js"></script>
 </head>
 
 <body>
@@ -198,6 +201,7 @@
 
 <div class="login-container">
     <div class="login-card">
+        <div id="yandex-auth-widget"></div>
         <div class="login-title">Добро пожаловать</div>
         <div class="login-subtitle">Войдите в свой аккаунт</div>
 
@@ -232,5 +236,81 @@
         </div>
     </div>
 </div>
+
+<script>
+    console.log('1. Скрипт на странице логина начал выполняться.');
+
+    // Проверяем, что функция YaAuthSuggest вообще существует
+    if (typeof YaAuthSuggest === 'undefined') {
+        console.error('2. ОШИБКА: Функция YaAuthSuggest не найдена. Скрипт от Яндекса, вероятно, не загрузился.');
+    } else {
+        console.log('2. Функция YaAuthSuggest найдена. Пытаюсь инициализировать кнопку...');
+
+        YaAuthSuggest.init(
+            {
+                client_id: '5c3a8ecedb1e4e46836cac3d568ae718',
+                response_type: 'token',
+                redirect_uri: 'http://localhost:8081/suggest/token'
+            },
+            'http://localhost:8081',
+            {
+                view: 'button',
+                parentId: 'yandex-auth-widget',
+                buttonSize: 'l',
+                buttonTheme: 'dark',
+                buttonBorderRadius: 100
+            }
+        )
+            .then(({ handler }) => {
+                console.log('3. Промис успешно выполнен. Получен handler. Вызываем handler()...');
+                return handler();
+            })
+            .then(data => {
+                console.log('4. УСПЕХ! Токен получен:', data);
+
+                // Получаем CSRF токен из мета-тега
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+                // Отправляем токен на бэкенд
+                fetch('/api/auth/yandex', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        [csrfHeader]: csrfToken  // Добавляем CSRF токен
+                    },
+                    body: JSON.stringify({ token: data.access_token })
+                })
+                    .then(response => {
+                        console.log('Статус ответа:', response.status);
+                        return response.text();
+                    })
+                    .then(text => {
+                        console.log('Тело ответа:', text);
+                        try {
+                            const result = JSON.parse(text);
+                            console.log('Результат:', result);
+                            if (result.success) {
+                                window.location.href = '/';
+                            } else {
+                                alert('Ошибка авторизации на сервере');
+                            }
+                        } catch(e) {
+                            console.error('Не удалось распарсить JSON:', text);
+                            alert('Ошибка: сервер вернул неверный ответ');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Ошибка при отправке токена:', error);
+                        alert('Не удалось связаться с сервером');
+                    });
+            })
+            .catch(error => {
+                console.error('5. ОШИБКА при авторизации:', error);
+                alert('Произошла ошибка при попытке войти через Яндекс. Подробности смотрите в консоли (F12).');
+            });
+    }
+    console.log('6. Выполнение скрипта завершено.');
+</script>
 </body>
 </html>
