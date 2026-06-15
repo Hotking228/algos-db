@@ -265,7 +265,7 @@
                 return handler();
             })
             .then(data => {
-                console.log('4. Токен получен');
+                console.log('4. Токен получен: ' + data.body);
 
                 const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
                 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');

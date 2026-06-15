@@ -1,6 +1,7 @@
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 COPY  build/libs/algos-db-0.0.1-SNAPSHOT.jar app.jar
+COPY algos algos
 
 EXPOSE 8081
 

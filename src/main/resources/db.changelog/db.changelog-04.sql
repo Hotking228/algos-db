@@ -431,8 +431,3 @@ INSERT INTO algo_tag (algo_id, tag_id) VALUES
 INSERT INTO algo_tag (algo_id, tag_id) VALUES
                                            (88, 3),   -- структуры данных
                                            (88, 8);   -- линейные структуры
-
--- Система непересекающихся множеств с эвристиками (id=89)
-INSERT INTO algo_tag (algo_id, tag_id) VALUES
-                                           (89, 3),   -- структуры данных
-                                           (89, 22);  -- системы непересекающихся множеств

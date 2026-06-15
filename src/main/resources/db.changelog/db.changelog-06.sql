@@ -96,5 +96,4 @@ INSERT INTO algorithm (id, name, file_path, complexity_id) VALUES
     (85, 'Декартово дерево по неявному ключу', 'algos/treap-implicit.md', 2), -- O(log n)
     (86, 'Очередь с приоритетом', 'algos/priority-queue.md', 2),    -- O(log n) вставка/удаление
     (87, 'Стек с минимумом', 'algos/min-stack.md', 1),              -- O(1) все операции
-    (88, 'Очередь с минимумом', 'algos/min-queue.md', 1),           -- O(1) амортизированно
-    (89, 'Система непересекающихся множеств с эвристиками', 'algos/dsu-heuristics.md', 4); -- O(α(n))
+    (88, 'Очередь с минимумом', 'algos/min-queue.md', 1);          -- O(1) амортизированно
