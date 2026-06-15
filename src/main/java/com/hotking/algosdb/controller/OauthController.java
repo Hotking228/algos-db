@@ -4,14 +4,19 @@ import com.hotking.algosdb.entity.User;
 import com.hotking.algosdb.enums.Role;
 import com.hotking.algosdb.enums.Status;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -26,14 +31,14 @@ public class OauthController {
     UserManagementController userController;
 
     @PostMapping(value = "/yandex", consumes = "application/json")
-    public Map<String, Object> getYandexToken(@RequestBody Map<String, String> request,
-                                              HttpServletRequest req){
-        Executor thread = Executors.newSingleThreadExecutor();
-        thread.execute(() -> {
-            authenticateUser(req);
-        });
-        return Map.of("success", true,
-                      "message", "token received");
+    public ResponseEntity<Void> getYandexToken(@RequestBody Map<String, String> request,
+                                              HttpServletRequest req) throws IOException {
+        authenticateUser(req);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("http://localhost:8081/algo/all"));
+
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
     private void authenticateUser(HttpServletRequest request){

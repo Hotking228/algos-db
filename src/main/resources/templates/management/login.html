@@ -240,11 +240,10 @@
 <script>
     console.log('1. Скрипт на странице логина начал выполняться.');
 
-    // Проверяем, что функция YaAuthSuggest вообще существует
     if (typeof YaAuthSuggest === 'undefined') {
-        console.error('2. ОШИБКА: Функция YaAuthSuggest не найдена. Скрипт от Яндекса, вероятно, не загрузился.');
+        console.error('2. ОШИБКА: Функция YaAuthSuggest не найдена');
     } else {
-        console.log('2. Функция YaAuthSuggest найдена. Пытаюсь инициализировать кнопку...');
+        console.log('2. Функция YaAuthSuggest найдена');
 
         YaAuthSuggest.init(
             {
@@ -262,55 +261,45 @@
             }
         )
             .then(({ handler }) => {
-                console.log('3. Промис успешно выполнен. Получен handler. Вызываем handler()...');
+                console.log('3. Получен handler');
                 return handler();
             })
             .then(data => {
-                console.log('4. УСПЕХ! Токен получен:', data);
+                console.log('4. Токен получен');
 
-                // Получаем CSRF токен из мета-тега
                 const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
                 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
-                // Отправляем токен на бэкенд
-                fetch('/api/auth/yandex', {
+                return fetch('/api/auth/yandex', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        [csrfHeader]: csrfToken  // Добавляем CSRF токен
+                        [csrfHeader]: csrfToken
                     },
-                    body: JSON.stringify({ token: data.access_token })
-                })
-                    .then(response => {
-                        console.log('Статус ответа:', response.status);
-                        return response.text();
-                    })
-                    .then(text => {
-                        console.log('Тело ответа:', text);
-                        try {
-                            const result = JSON.parse(text);
-                            console.log('Результат:', result);
-                            if (result.success) {
-                                window.location.href = '/';
-                            } else {
-                                alert('Ошибка авторизации на сервере');
-                            }
-                        } catch(e) {
-                            console.error('Не удалось распарсить JSON:', text);
-                            alert('Ошибка: сервер вернул неверный ответ');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Ошибка при отправке токена:', error);
-                        alert('Не удалось связаться с сервером');
-                    });
+                    body: JSON.stringify({ token: data.access_token }),
+                    redirect: 'manual'  // ← Добавьте эту строку
+                });
+            })
+            .then(response => {
+                console.log('5. Статус ответа:', response.status);
+
+                // При redirect: 'manual' должен быть статус 302
+                if (response.status === 302 || response.status === 301) {
+                    const redirectUrl = response.headers.get('Location');
+                    console.log('6. Редирект на:', redirectUrl);
+                    window.location.href = redirectUrl;
+                } else {
+                    // Если по какой-то причине редиректа нет, просто переходим на главную
+                    console.log('Нет редиректа, перенаправляем вручную');
+                    window.location.href = 'http://localhost:8081/algo/all';
+                }
             })
             .catch(error => {
-                console.error('5. ОШИБКА при авторизации:', error);
-                alert('Произошла ошибка при попытке войти через Яндекс. Подробности смотрите в консоли (F12).');
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при авторизации');
+                window.location.href = 'http://localhost:8081/login';
             });
     }
-    console.log('6. Выполнение скрипта завершено.');
 </script>
 </body>
 </html>
