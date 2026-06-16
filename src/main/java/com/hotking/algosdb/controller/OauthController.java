@@ -27,7 +27,7 @@ import java.util.concurrent.Executors;
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/auth",
         produces = "application/json")
-@CrossOrigin("http://localhost:8081")
+@CrossOrigin("https://localhost:8081")
 public class OauthController {
 
     UserManagementController userController;
@@ -57,7 +57,7 @@ public class OauthController {
         System.out.println(parseJwt(jwt).toPrettyString());
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("http://localhost:8081/algo/all"));
+        headers.setLocation(URI.create("https://localhost:8081/algo/all"));
 
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }

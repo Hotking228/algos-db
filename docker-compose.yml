@@ -22,12 +22,28 @@ services:
     image: algos-db:latest
     ports:
       - '8081:8081'
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+      - 1.1.1.1
     environment:
       - SERVER_PORT=8081
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/algos
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=12345
-      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_PROFILES_ACTIVE=prod
+      - KEY_STORE_PATH=/keys/algoKeys.jks
+      - KEY_STORE_PASSWORD=${KEY_STORE_PASSWORD}
+      - EMAIL_NAME=${EMAIL_NAME}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID}
+      - YANDEX_CLIENT_SECRET=${YANDEX_CLIENT_SECRET}
+
+      - SPRING_MAIL_PROPERTIES_MAIL_DEBUG=true
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_MAIL=DEBUG
+      - LOGGING_LEVEL_COM_SUN_MAIL=DEBUG
+      - LOGGING_LEVEL_JAKARTA_MAIL=DEBUG
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_BOOT=DEBUG
     depends_on:
       postgres:
         condition: service_healthy
@@ -37,6 +53,7 @@ services:
     volumes:
         - '/home/hotking/logs:/app/logs'
         - '/home/hotking/algos-app/algos:/algos'
+        - '/home/hotking/keys:/keys'
 
 networks:
   algos-network:

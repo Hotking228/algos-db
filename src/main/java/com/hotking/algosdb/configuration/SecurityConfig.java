@@ -43,7 +43,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/").denyAll()
                         .requestMatchers("/login", "/register", "/algo/**", "/logout",
-                                "/confirmCode", "/confirm-admin", "/suggest/token", "/api/auth/yandex").permitAll()
+                                "/confirmCode", "/confirm-admin", "/suggest/token", "/api/auth/yandex",
+                                "/actuator/health").permitAll()
                         .requestMatchers("/management/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(login -> login
